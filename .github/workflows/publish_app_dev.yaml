@@ -54,8 +54,15 @@ jobs:
       - name: Create IPA
         run: |
           cd simple_live_app
+          # 自动寻找 Runner.app 的位置，不管它在哪个子目录
+          APP_PATH=$(find build/ios/archive -name "Runner.app" | head -n 1)
+          if [ -z "$APP_PATH" ]; then
+            APP_PATH=$(find build/ios -name "Runner.app" | head -n 1)
+          fi
+          echo "Found app at: $APP_PATH"
+          
           mkdir -p build/ios/iphoneos/Payload
-          cp -R build/ios/iphoneos/Runner.app build/ios/iphoneos/Payload/Runner.app
+          cp -R "$APP_PATH" build/ios/iphoneos/Payload/
           cd build/ios/iphoneos/
           zip -q -r ios_no_sign.ipa Payload
           cd ../../../
