@@ -69,10 +69,12 @@ jobs:
 
       #打包iOS
       - name: Build IPA
-        run: |
-          sudo xcode-select -s /Applications/Xcode_15.4.app
-          cd simple_live_app
-          flutter build ios --release --no-codesign
+       run: |
+        export DEVELOPER_DIR=/Applications/Xcode_15.4.app/Contents/Developer
+        cd simple_live_app
+        rm -rf build/ios
+        rm -rf ios/Pods ios/Podfile.lock
+        flutter build ipa --release --no-codesign
 
       #创建未签名ipa
       - name: Create IPA
